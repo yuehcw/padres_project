@@ -1,12 +1,12 @@
-# Padres Project
+# Baseball Stats Application
 
-A full-stack web application for viewing Padres 2024 July baseball statistics using Flask, React, and PostgreSQL.
+A full-stack web application for viewing baseball statistics using Flask, React, and PostgreSQL.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
 - Python 3.8 or higher
-- Node.js 18 or higher
+- Node.js 14 or higher
 - PostgreSQL 13 or higher
 - pip (Python package manager)
 - npm (Node package manager)
@@ -15,53 +15,52 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yuehcw/padres_project.git
-cd padres_project
+git clone [your-repository-url]
+cd [repository-name]
 ```
 
-### 2. PostgreSQL Setup
+### 2. Database Setup
 
 #### First-time PostgreSQL Setup:
-
 1. Download and Install PostgreSQL:
    - Visit [PostgreSQL Downloads](https://www.postgresql.org/download/)
    - Choose your operating system and follow installation instructions
    - During installation, note down the port number (default is 5432)
 
-2. First-time User Setup:
-   ```bash
-   # For Windows:
-   # After installation, search for "SQL Shell (psql)" in Start menu and open it
-   # It will prompt for server, database, port, username - press Enter to accept defaults
-   
-   # For macOS/Linux:
-   # Open terminal and run:
-   sudo -u postgres psql
-   ```
-
-3. Create Your Database and (Optionally) a New User:
+2. Create Database and User:
    ```sql
+   # Connect to PostgreSQL
+   psql -U postgres
+
    -- Once in psql shell:
    CREATE DATABASE padres_project;
-   
+
    -- Optional: If you want to create a new user
    CREATE USER your_username WITH PASSWORD 'your_password';
    GRANT ALL PRIVILEGES ON DATABASE padres_project TO your_username;
-   
+
+   -- Connect to the database
+   \c padres_project
+
+   -- Now proceed with schema setup
    ```
-
-#### If PostgreSQL is already installed:
-```bash
-# Connect to PostgreSQL
-psql -U postgres
-
-# Create database
-CREATE DATABASE padres_project;
-```
 
 ### 3. Database Schema Setup
 ```sql
+-- Make sure you're connected to padres_project database
 -- Run these commands while still in psql:
+
+-- Create player_bio table
+CREATE TABLE player_bio (
+    ...
+
+
+-- Once inside psql shell:
+CREATE DATABASE padres_project;
+
+-- Optional: If you want to create a new user
+CREATE USER your_username WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE padres_project TO your_username;
 
 -- Connect to the newly created database
 \c padres_project
@@ -176,7 +175,26 @@ CREATE TABLE batting_info (
 \q
 ```
 
-### 4. Backend Setup
+After setting up the database schema, proceed with the Python scripts to load the data.
+
+4. Create Your Database and Set Up Schema:
+   ```sql
+   -- Once in psql shell:
+   CREATE DATABASE padres_project;
+   
+   -- Optional: If you want to create a new user
+   CREATE USER your_username WITH PASSWORD 'your_password';
+   GRANT ALL PRIVILEGES ON DATABASE padres_project TO your_username;
+   
+   -- Connect to the database
+   \c padres_project
+
+   -- Run the table creation scripts (see step 3)
+
+   \q  -- to quit psql
+   ```
+
+### 3. Backend Setup
 ```bash
 # Navigate to backend directory
 cd backend
@@ -198,19 +216,6 @@ touch backend/.env  # On macOS/Linux
 # OR
 type nul > backend/.env  # On Windows
 
-# Add the following content to your backend/.env file:
-FLASK_APP=app
-FLASK_ENV=development
-### If your PostgreSQL has no password:
-DATABASE_URL=postgresql://<username>@localhost:5432/padres_project
-
-### If your PostgreSQL has a password:
-DATABASE_URL=postgresql://<username>:<password>@localhost:5432/padres_project
-
-# Replace:
-# <username> with your PostgreSQL username
-# <password> with your PostgreSQL password (if you have one)
-
 # Load data into database
 # Navigate to utils directory
 cd utils
@@ -224,7 +229,7 @@ python load_batting_info.py
 flask run
 ```
 
-### 5. Frontend Setup
+### 4. Frontend Setup
 ```bash
 # Open a new terminal
 # Navigate to frontend directory
@@ -254,77 +259,48 @@ Note about ports:
   1. For backend: Set `FLASK_RUN_PORT=your_port` in backend/.env
   2. For frontend: Set `VITE_PORT=your_port` in frontend/.env
 
-## Dependencies
-
-### Backend Dependencies (requirements.txt)
+## Project Structure
 ```
-alembic==1.14.0
-beautifulsoup4==4.12.3
-blinker==1.9.0
-bs4==0.0.2
-certifi==2024.12.14
-charset-normalizer==3.4.1
-click==8.1.8
-Flask==3.0.0
-Flask-Cors==5.0.0
-Flask-Migrate==4.0.5
-Flask-SQLAlchemy==3.1.1
-idna==3.10
-itsdangerous==2.2.0
-Jinja2==3.1.5
-Mako==1.3.8
-MarkupSafe==3.0.2
-numpy==2.2.1
-pandas==2.2.2
-psycopg2-binary==2.9.10
-python-dateutil==2.9.0.post0
-python-dotenv==1.0.0
-pytz==2024.2
-requests==2.32.3
-six==1.17.0
-soupsieve==2.6
-SQLAlchemy==2.0.36
-typing_extensions==4.12.2
-tzdata==2024.2
-urllib3==2.3.0
-Werkzeug==3.1.3
+├── backend/
+│   ├── app/              # Main Flask application
+│   ├── data/             # CSV data files
+│   │   ├── padres_project_data.csv
+│   │   └── player_info.csv
+│   ├── utils/           # Data loading scripts
+│   │   ├── load_players_info.py
+│   │   ├── load_pitching_info.py
+│   │   └── load_batting_info.py
+│   └── requirements.txt  # Python dependencies
+├── frontend/
+│   ├── src/            # React source code
+│   ├── public/         # Static files
+│   └── package.json    # Node.js dependencies
+└── README.md
 ```
 
-### Frontend Dependencies (package.json)
-```json
-{
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.4",
-    "@radix-ui/react-slot": "^1.1.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "d3": "^7.9.0",
-    "lucide-react": "^0.469.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-icons": "^5.4.0",
-    "react-router-dom": "^7.1.1",
-    "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@shadcn/ui": "^0.0.4",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
-    "vite": "^6.0.5"
-  }
-}
-```
+## Troubleshooting
+
+#### Common PostgreSQL Issues:
+
+1. **"psql: command not found"**
+   - Make sure PostgreSQL is installed
+   - Add PostgreSQL to your system PATH
+     - Windows: Usually `C:\Program Files\PostgreSQL\{version}\bin`
+     - macOS: If installed via Homebrew, run `brew link postgresql`
+     - Linux: Should be added automatically during installation
+
+2. **"could not connect to server"**
+   - Check if PostgreSQL service is running:
+     - Windows: Check Services app
+     - macOS: Run `brew services start postgresql`
+     - Linux: Run `sudo service postgresql start`
+
+3. **"peer authentication failed"**
+   - Edit pg_hba.conf to change authentication method
+   - Location:
+     - Windows: `C:\Program Files\PostgreSQL\{version}\data\pg_hba.conf`
+     - macOS: `/usr/local/var/postgres/pg_hba.conf`
+     - Linux: `/etc/postgresql/{version}/main/pg_hba.conf`
 
 ## Data Loading
 
@@ -340,43 +316,17 @@ Required CSV files in `backend/data`:
 - padres_project_data.csv
 - player_info.csv
 
-## Troubleshooting
+## Support
 
-### Common Issues
+For additional help or to report issues, please create a new issue in the project repository.
 
-1. **Database Connection Error**
-   - Verify PostgreSQL is running
-   - Check database credentials in `.env`
-   - Ensure database exists
-   - Try: `psql -U postgres -h localhost -p 5432 baseball_stats`
+## Contributing
 
-2. **Python Dependencies**
-   - Verify virtual environment is activated
-   - Run `pip install -r requirements.txt` again
-   - If psycopg2 fails, try: `pip install psycopg2-binary`
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
 
-3. **Node Modules**
-   - Delete `node_modules` folder and `package-lock.json`
-   - Run `npm install` again
-   - If vite has issues: `npm clean-install`
+## License
 
-4. **Data Loading Issues**
-   - Ensure CSV files are in the correct location
-   - Check file permissions
-   - Verify database connection
-   - Check Python pandas version compatibility
-
-### Database Reset
-
-If you need to reset the database:
-
-```bash
-psql -U postgres
-DROP DATABASE baseball_stats;
-CREATE DATABASE baseball_stats;
-\q
-
-# Then rerun migrations and load data
-flask db upgrade
-python load_data.py
-```
+[Your chosen license]
