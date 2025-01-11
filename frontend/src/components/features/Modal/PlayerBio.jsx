@@ -1,9 +1,13 @@
 const PlayerBio = ({ player }) => {
-  const formatHeightWeight = (height, weight) => {
-    if (!height || !weight) return "N/A";
-    const feet = Math.floor(height);
-    const inches = Math.round((height - feet) * 12);
-    return `${feet}'${inches}" ${weight}LBS`;
+  const formatHeightWeight = (heightCm, weightKg) => {
+    if (!heightCm || !weightKg) return "N/A";
+
+    const heightInInches = heightCm / 2.54;
+    const feet = Math.floor(heightInInches / 12);
+    const inches = Math.round(heightInInches % 12);
+    const weightLbs = Math.round(weightKg * 2.20462);
+
+    return `${feet}'${inches}" ${weightLbs}LBS`;
   };
 
   return (
