@@ -15,3 +15,16 @@ export const fetchPlayers = async () => {
     throw error;
   }
 };
+
+export const fetchPlayerBio = async (playerId) => {
+  try {
+    const response = await fetch(`${API_URL}/player/bio/${playerId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch player data");
+    }
+    const data = await response.json();
+    return data.player;
+  } catch (error) {
+    throw new Error("Error fetching player data: " + error.message);
+  }
+};

@@ -2,24 +2,12 @@ import { Link, useLocation } from 'react-router-dom';
 
 const links = [
   {
-    name: "home",
+    name: "roster",
     path: "/",
   },
   {
-    name: "services",
-    path: "/services",
-  },
-  {
-    name: "resume",
-    path: "/resume",
-  },
-  {
-    name: "work",
-    path: "/work",
-  },
-  {
-    name: "contact",
-    path: "/contact",
+    name: "leaderboard",
+    path: "/leaderboard",
   },
 ];
 
