@@ -2,6 +2,8 @@
 
 A full-stack web application for viewing Padres 2024 July baseball statistics using Flask, React, and PostgreSQL.
 
+![Screen Shot](screenshot.png)
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -220,7 +222,7 @@ python load_players_info.py
 python load_pitching_info.py
 python load_batting_info.py
 
-# Start Flask server
+# Start Flask server (from backend root directory)
 flask run
 ```
 
